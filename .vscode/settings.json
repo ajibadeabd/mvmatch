@@ -1,0 +1,40 @@
+{
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#fa6a0a",
+    "activityBar.activeBorder": "#04bbb7",
+    "activityBar.background": "#fa6a0a",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#04bbb7",
+    "activityBarBadge.foreground": "#15202b",
+    "statusBar.background": "#fa6a0a",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#fa6a0a",
+    "titleBar.activeBackground": "#fa6a0a",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#fa6a0a",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/node_modules/": true,
+    "**/coverage/": true,
+    "**/npm-debug.log": true,
+    "**/dist": true,
+    "**/data": true,
+    "**/.env": false
+  },
+
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.format": true
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": ["nestjs", "openai"]
+}
