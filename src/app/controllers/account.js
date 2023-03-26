@@ -51,7 +51,7 @@ class AccountController {
   };
 
   getAccount = async (filteredValue, session) => {
-    // Create a mongoose query to find the account with the filtered value.
+    /// Create a mongoose query to find the account with the filtered value.
     const query = this.#models.Account.findOne({
       ...filteredValue,
     });
