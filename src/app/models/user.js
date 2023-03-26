@@ -12,6 +12,10 @@ const userSchema = new Schema(
       ref: "Account",
     },
     role: { type: String, enum: ["seller", "buyer"], default: "buyer" },
+    purchases: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Purchase",
+    },
   },
   { timestamps: true }
 );

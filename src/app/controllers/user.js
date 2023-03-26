@@ -20,14 +20,35 @@ class UserController {
   // Method for logging out user by removing all sessions
   logout = async (userDetails) => {
     try {
-      // Throw error if there are no active sessions for user
-      if (userDetails.sessions.length == 0) throw "No active session";
+      // // Throw error if there are no active sessions for user
+      // if (userDetails.sessions.length == 0) throw "No active session";
 
-      // Update user's sessions to an empty array
-      await this.updateUser(userDetails.id, {
+      // // Update user's sessions to an empty array
+      // await this.updateUser(userDetails.id, {
+      //   sessions: [],
+      // });
+
+      let user = await this.getUser(
+        { username: userDetails.username },
+        "+password"
+      );
+      // If no user is found, throw an error
+      if (!user) throw "user not found";
+
+      // Compare the provided password with the stored password using bcrypt
+      let isPasswordCorrect = await this.#packages.bcrypt.compare(
+        userDetails.password,
+        user.password
+      );
+
+      // If the password is incorrect, throw an error
+      if (!isPasswordCorrect) throw "invalid credentials";
+
+      if (user.sessions.length == 0) throw "No active session";
+
+      await this.updateUser(user.id, {
         sessions: [],
       });
-
       // Return success message
       return {
         status: true,
@@ -153,21 +174,27 @@ class UserController {
       return { status: false, user: null, message: error };
     }
   };
-
   createUser = async (userDetails) => {
-    const session = await this.#packages.mongoose.startSession();
-    let user;
+    // create a method named createUser that accepts userDetails as an argument
+    const session = await this.#packages.mongoose.startSession(); // create a Mongoose session
+    let user; // declare a variable named user
     try {
       await session.withTransaction(async () => {
+        // execute a transaction using the Mongoose session
         const existingUser = await this.#models.User.findOne({
-          username: userDetails.username,
+          // find a user in the database
+          username: userDetails.username, // search for a user with a matching username
         })
-          .session(session)
-          .setOptions({ pessimistic: true });
+          .session(session) // use the Mongoose session for the query
+          .setOptions({ pessimistic: true }); // set pessimistic locking
+
         if (existingUser) {
-          throw "User already has an account";
+          // check if a user already exists
+          throw "User already has an account"; // throw an error if the user already has an account
         }
+
         [user] = await this.#models.User.create(
+          // create a new user in the database
           [
             {
               username: userDetails.username,
@@ -177,21 +204,25 @@ class UserController {
           ],
           { session }
         );
+
         const [userAccount] = await this.#services.AccountController.create(
+          // create a new account for the user
           user._id,
           session
         );
 
-        user.account = userAccount.id;
-        user = await user.save({ session });
+        user.account = userAccount.id; // associate the account with the user
+        user = await user.save({ session }); // save the user
       });
     } catch (err) {
-      return { status: false, user: null, message: err };
+      // catch any errors that occur during the transaction
+      return { status: false, user: null, message: err }; // return an error message
     } finally {
-      session.endSession();
+      session.endSession(); // end the Mongoose session
     }
 
     return {
+      // return the user details
       status: true,
       user: user.toJSON(),
       message: "user created successfully",

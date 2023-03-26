@@ -1,4 +1,4 @@
-const UserController = require("../../controllers/user");
+const AccountController = require("../../controllers/account");
 const PassportAuthenticator = require("../../helpers/validator/passport");
 
 class AccountRoute {
@@ -8,23 +8,25 @@ class AccountRoute {
   }
 
   "post.deposit" = async (request, response) => {
-    try {
-      const { amount } = request.body;
-      const allowedCoins = [5, 10, 20, 50, 100];
-      if (!allowedCoins.includes(amount)) {
-        throw `Amount should be ${allowedCoins}`;
-      }
-      let balance = await this.#services.AccountController.deposit(
-        request.user,
-        amount
-      );
-      return response.status(200).json({
-        message: "account funded successfully successfully",
-        data: balance,
-      });
-    } catch (err) {
-      throw err;
+    const { amount } = request.body;
+
+    let accountResponse = await this.#services.AccountController.deposit(
+      request.user,
+      amount
+    );
+    if (!accountResponse.status) {
+      return response.status(400).json(accountResponse);
     }
+    return response.status(200).json(accountResponse);
+  };
+  "post.reset" = async (request, response) => {
+    let accountResponse = await this.#services.AccountController.reset(
+      request.user.account
+    );
+    if (!accountResponse.status) {
+      return response.status(400).json(accountResponse);
+    }
+    return response.status(200).json(accountResponse);
   };
 }
 
@@ -35,16 +37,20 @@ class Validator {
     this.#validator = validator;
     this.#services = services;
   }
-  get = () => {
+
+  "post.deposit" = () => {
+    return [this.#validator.ValidatorFactory.depositCoinValidator()];
+  };
+
+  all = () => {
     return [
       this.#services.PassportAuthenticator.authenticateUser(),
-      this.#validator.ValidatorFactory.createUserValidator(),
+      // this.#validator.buyerValidator,
     ];
   };
-  all = () => [];
 }
 module.exports = {
   route: AccountRoute,
   middleware: Validator,
-  injectableClass: [UserController, PassportAuthenticator],
+  injectableClass: [AccountController, PassportAuthenticator],
 };

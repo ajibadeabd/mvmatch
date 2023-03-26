@@ -22,7 +22,7 @@ class PassportAuthenticator {
         try {
           const user = await this.#models.User.findOne({
             _id: payload.userId,
-          });
+          }).populate("account");
 
           if (user && user.sessions.includes(payload.sessionId)) {
             return done(null, user);

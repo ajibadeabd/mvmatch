@@ -1,5 +1,8 @@
 const Exclusive = require("exclusivejs").instance();
 const middleware = require("../utils/middleware");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("../../swagger.json");
+
 let validator = require("../app/helpers/validator/index");
 async function BootStrap() {
   const server = Exclusive.setConfig()
@@ -11,9 +14,14 @@ async function BootStrap() {
       databaseUrl: process.env.DATABASE_URL,
       orm: "mongoose",
     })
-    .setApiPrefix("api/v1");
+    .setApiPrefix("api/v1")
+    .connectDocumentation(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
 
-  await server.init();
+  return await server.init();
 }
 
-BootStrap();
+module.exports = BootStrap();

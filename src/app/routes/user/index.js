@@ -15,8 +15,9 @@ class UserRoute {
     }
     return response.status(200).json(userResponse);
   };
-  "get.logout/all" = async (request, response) => {
-    let userResponse = await this.#services.UserController.logout(request.user);
+  "post.logout/all" = async (request, response) => {
+
+    let userResponse = await this.#services.UserController.logout(request.body);
 
     if (!userResponse.status) {
       return response.status(400).json(userResponse);
@@ -75,8 +76,8 @@ class Validator {
     ];
   };
 
-  "get.logout/all" = () => [
-    this.#services.PassportAuthenticator.authenticateUser(),
+  "post.logout/all" = () => [
+    this.#validator.ValidatorFactory.logoutUserValidator(),
   ];
   get = () => [this.#services.PassportAuthenticator.authenticateUser()];
   "post.login" = () => [this.#validator.ValidatorFactory.loginUserValidator()];
