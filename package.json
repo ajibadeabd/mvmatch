@@ -25,5 +25,8 @@
     "passport-jwt": "^4.0.1",
     "supertest": "^6.3.3",
     "swagger-ui-express": "^4.6.2"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
