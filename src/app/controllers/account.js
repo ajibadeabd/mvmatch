@@ -61,7 +61,7 @@ class AccountController {
       query.session(session).setOptions({ pessimistic: true });
     }
 
-    // Execute the query and return the account document.
+    /// Execute the query and return the account document.
     return await query.exec();
   };
 
