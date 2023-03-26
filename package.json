@@ -15,7 +15,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "exclusivejs": "^1.0.18",
+    "exclusivejs": "^1.0.19",
     "express-validator": "^6.15.0",
     "jest": "^29.5.0",
     "jsonwebtoken": "^9.0.0",

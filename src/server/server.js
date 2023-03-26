@@ -2,7 +2,6 @@ const Exclusive = require("exclusivejs").instance();
 const middleware = require("../utils/middleware");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../../swagger.json");
-
 let validator = require("../app/helpers/validator/index");
 async function BootStrap() {
   const server = Exclusive.setConfig()
